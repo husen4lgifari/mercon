@@ -4,7 +4,7 @@ $(function() {
 	canvas.height = $(window).height();
 	var ctx = canvas.getContext('2d');
 
-	// resize
+	
 	$(window).on('resize', function() {
 		canvas.width = $(window).width();
 		canvas.height = $(window).height();
@@ -13,10 +13,10 @@ $(function() {
 		center = { x: canvas.width / 2, y: canvas.height / 2 };
 	});
 
-	// init
+	
 	ctx.fillStyle = '#000003';
 	ctx.fillRect(0, 0, canvas.width, canvas.height);
-	// objects
+	
 	var listFire = [];
 	var listFirework = [];
 	var listText = [];
@@ -53,14 +53,14 @@ $(function() {
 		};
 		//
 		listFire.push(fire);
-		// play sound
+		
 		playLaunchSound();
 	}
-	// define array of sound
+	
 	var listExpSound = $('audio.exp');
 	var listLaunchSound = $('audio.launch');
 
-	// define array position of text
+	
 	var textString = 'happy';
 	var textMatrix = [
 		4.5, 0, 5.5, 0, 6.5, 0, 7.5, 0, 8.5, 0,
@@ -170,7 +170,7 @@ $(function() {
 			text.direct = (text.left - text.x) * 0.08;
 			listText.push(text);
 		}
-		// play sound
+		
 		playExpSound();
 		//
 		lights.push({ x: center.x + left * 0.9, y: center.y + top, color: text.fill, radius: range * 2 });
@@ -638,26 +638,26 @@ $(function() {
 	})();
 
 	function update() {
-		// update fire logic
+		
 		for (var i = 0; i < listFire.length; i++) {
 			var fire = listFire[i];
 			//
 			if (fire.y <= fire.far) {
-				// play sound
+				
 				playExpSound();
-				// case add firework
+				
 				fired++;
 				var color = actions[Math.floor(Math.random() * actions.length)](fire);
-				// light
+				
 				lights.push({ x: fire.x, y: fire.y, color: color, radius: range * 2 });
-				// reset
+				
 				fire.y = fire.base.y;
 				fire.x = fire.base.x;
-				// special
+				
 				if (fired % 33 == 0) {
 					initSpark();
 				}
-				// on hold
+				
 				supprise = fired % 100 == 0 ? true : supprise;
 				if (supprise) {
 					fire.vx = 0;
@@ -683,7 +683,7 @@ $(function() {
 				fire.vy = fire.base.vy;
 				fire.ax = Math.random() * 0.06 - 0.03;
 				fire.alpha = 1;
-				// play sound
+				
 				playLaunchSound();
 			}
 			else if (fire.hold && fire.delay > 0) {
@@ -697,7 +697,7 @@ $(function() {
 			}
 		}
 
-		// update firework logic
+		
 		for (var i = listFirework.length - 1; i >= 0; i--) {
 			var firework = listFirework[i];
 			if (firework) {
@@ -717,13 +717,13 @@ $(function() {
 			}
 		}
 
-		// supprise happy new year!
+		
 		if (supprise && onHold == 10) {
 			supprise = false;
 			setTimeout(initText, 3000);
 		}
 
-		// update text logic
+		
 		for (var i = listText.length - 1; i >= 0; i--) {
 			var text = listText[i];
 			text.vx *= 0.9;
@@ -742,17 +742,17 @@ $(function() {
 			}
 		}
 
-		// update special logic
+		
 		for (var i = listSpecial.length - 1; i >= 0; i--) {
 			var special = listSpecial[i];
 			if (special.y <= special.far) {
-				// play sound
+				
 				playExpSound();
-				// light
+				
 				lights.push({ x: special.x, y: special.y, color: special.fill, alpha: 0.02, radius: range * 2 });
-				//
+				
 				makeSpark(special);
-				// remove from list
+				
 				listSpecial.splice(i, 1);
 			}
 			else {
@@ -763,7 +763,7 @@ $(function() {
 			}
 		}
 
-		// update spark logic
+		
 		for (var i = listSpark.length - 1; i >= 0; i--) {
 			var spark = listSpark[i];
 			if (spark) {
@@ -788,13 +788,13 @@ $(function() {
 	}
 
 	function draw() {
-		// clear
+		
 		ctx.globalCompositeOperation = 'source-over';
 		ctx.globalAlpha = 0.2;
 		ctx.fillStyle = '#000003';
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-		// re-draw
+		
 		ctx.globalCompositeOperation = 'screen';
 		for (var i = 0; i < listFire.length; i++) {
 			var fire = listFire[i];
@@ -819,10 +819,7 @@ $(function() {
 		for (var i = 0; i < listSpecial.length; i++) {
 			var special = listSpecial[i];
 			ctx.globalAlpha = special.alpha;
-			// ctx.beginPath();
-			// ctx.arc(special.x, special.y, special.size, 0, Math.PI * 2);
-			// ctx.closePath();
-			// ctx.fill();
+			
 			ctx.fillStyle = special.fill;
 			ctx.fillRect(special.x - special.size, special.y - special.size, special.size * 2, special.size *2);
 		}
@@ -830,15 +827,12 @@ $(function() {
 		for (var i = 0; i < listSpark.length; i++) {
 			var spark = listSpark[i];
 			ctx.globalAlpha = spark.alpha;
-			// ctx.beginPath();
-			// ctx.arc(spark.x, spark.y, spark.size, 0, Math.PI * 2);
-			// ctx.closePath();
-			// ctx.fill();
+			
 			ctx.fillStyle = spark.fill;
 			ctx.fillRect(spark.x - spark.size, spark.y - spark.size, spark.size * 2, spark.size *2);
 		}
 
-		// light effect
+		
 		while (lights.length) {
 			var light = lights.pop();
 			var gradient = ctx.createRadialGradient(light.x, light.y, 0, light.x, light.y, light.radius);
@@ -851,7 +845,7 @@ $(function() {
 			ctx.fillRect(light.x - light.radius, light.y - light.radius, light.radius * 2, light.radius * 2);
 		}
 
-		// supprise: HAPPY LUNAR NEW YEAR 2017!
+		
 		for (var i = 0; i < listText.length; i++) {
 			var text = listText[i];
 			ctx.globalAlpha = text.alpha;
